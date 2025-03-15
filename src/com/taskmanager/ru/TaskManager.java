@@ -16,17 +16,18 @@ public class TaskManager {
         task.setId(nextId++);
         tasks.add(task);
     }
-    public void removeTask(int number){
+    public void removeTask(int id){
         if(tasks.isEmpty()){
-            System.out.println("Список пуст");
+            System.out.println("The task list is empty");
             return;
         }
-        if(number > 0 && number <= tasks.size()){
-            tasks.remove(number - 1);
-        }else{
-            System.out.println("Задача не найдена");
+        for(int i = 0; i < tasks.size(); i++){
+            if(tasks.get(i).getId() == id){
+                tasks.remove(id);
+                return;
+            }
         }
-
+        System.out.println("Task not found.");
     }
     public void showTasks(){
         System.out.println("ID | Name       | Description     | Status");

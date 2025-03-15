@@ -1,21 +1,55 @@
 package com.taskmanager.ru;
 
+import java.util.Scanner;
+
 public class Main{
+
+    public static void cleanConsole() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
     public static void main(String[] args){
-        System.out.println("Hello world!");
         TaskManager taskManager = new TaskManager();
         TaskCreator creator = new TaskCreator();
-        Task task = creator.createTask();
-        Task task1 = creator.createTask();
-
-        Task task2 = creator.createTask();
-        Task task3 = creator.createTask();
-        taskManager.addTask(task);
-        taskManager.addTask(task1);
-        taskManager.addTask(task2);
-        taskManager.addTask(task3);
-        taskManager.showTasks();
-        taskManager.removeTask(2);
-        taskManager.showTasks();
+        Scanner in = new Scanner(System.in);
+        boolean running = true;
+        while(running){
+            cleanConsole();
+            int choice;
+            int num;
+            System.out.println("Commands:");
+            System.out.println("1. Add a task.");
+            System.out.println("2. Delete task.");
+            System.out.println("3. Show tasks.");
+            System.out.println("4. Exit.");
+            System.out.println("Enter command (1-4): ");
+            choice = in.nextInt();
+            in.nextLine();
+            switch(choice){
+                case 1:
+                    cleanConsole();
+                    taskManager.addTask(creator.createTask());
+                    break;
+                case 2:
+                    cleanConsole();
+                    System.out.println("Enter the task ID to delete: ");
+                    num = in.nextInt();
+                    in.nextLine();
+                    taskManager.removeTask(num);;
+                    break;
+                case 3:
+                    cleanConsole();
+                    taskManager.showTasks();
+                    break;
+                case 4:
+                    running = false;
+                    break;
+                default:
+                    cleanConsole();
+                    System.out.println("Wrong command, try again (1-4).");
+                    break;
+            }
+        }
     }
 }
