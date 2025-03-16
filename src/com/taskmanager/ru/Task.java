@@ -17,7 +17,7 @@ public class Task {
         this.status = Status.TODO;
         this.difficulty = Difficulty.EASY;
         this.deadline = null;
-        this.created = LocalDate.now();
+        this.created = null;
     }
 
     // Setters
@@ -65,12 +65,5 @@ public class Task {
     }
     public LocalDate getCreated(){
         return created;
-    }
-
-    //
-
-    public String toString(){
-        String s = "ID: " + id + " Name: " + name + "Description: " + description + " Status: " + status + "\n";
-        return s;
     }
 }
