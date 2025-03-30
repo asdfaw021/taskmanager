@@ -17,7 +17,7 @@ public class Main{
         while(running){
             cleanConsole();
             int choice = 0;
-            int num = 0;
+            int num;
             boolean CValid = false;
             boolean NValid = false;
             System.out.println("Commands:");
@@ -32,7 +32,6 @@ public class Main{
                     in.nextLine();
                     if(choice < 1 || choice > 4){
                         System.out.println("Wrong command, try again (1-4).");
-                        CValid = false;
                     }else{
                         CValid = true;
                     }
