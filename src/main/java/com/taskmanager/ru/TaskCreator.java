@@ -4,7 +4,10 @@ import java.util.Scanner;
 import java.time.LocalDate;
 
 public class TaskCreator {
-    private final Scanner in = new Scanner(System.in);
+    private final Scanner in;
+    public TaskCreator(Scanner scanner){
+        this.in = scanner;
+    }
     private int getIntInput(String prompt, int min, int max){
         System.out.println(prompt);
         boolean valid = false;
@@ -74,11 +77,11 @@ public class TaskCreator {
             }else{
                 try{
                     dl = LocalDate.parse(ddate);
-                    if(dl.isAfter(LocalDate.now())){
+                    if(!dl.isBefore(LocalDate.now())){
                         Dvalid = true;
                     }
                     else{
-                        System.out.println("The deadline date must be later than today's date");
+                        System.out.println("The deadline date must be no later than today");
                     }
                 } catch (Exception e) {
                     System.out.println("Please enter the deadline date correctly");

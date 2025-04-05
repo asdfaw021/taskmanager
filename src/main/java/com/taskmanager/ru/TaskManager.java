@@ -8,8 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Scanner;
 
 public class TaskManager {
     private ArrayList<Task> tasks;
@@ -19,12 +17,16 @@ public class TaskManager {
         tasks = new ArrayList<>();
         nextId = 0;
     }
-
+    private Gson getGson() {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
+        return builder.create();
+    }
     public void addTask(Task task){
         task.setId(nextId++);
         tasks.add(task);
     }
-    public void removeTask(int id, Scanner in){
+    public void removeTask(int id){
         if(tasks.isEmpty()){
             System.out.println("The task list is empty");
             return;
@@ -33,14 +35,10 @@ public class TaskManager {
             if(tasks.get(i).getId() == id){
                 tasks.remove(i);
                 System.out.println("Task with ID " + id + " removed.");
-                System.out.println("Press enter to continue: ");
-                in.nextLine();
                 return;
             }
         }
         System.out.println("Task not found.");
-        System.out.println("Press enter to continue: ");
-        in.nextLine();
     }
     public void showTasks(){
         if(tasks.isEmpty()) {
@@ -55,9 +53,7 @@ public class TaskManager {
         }
     }
     public void saveToFile() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
-        Gson gson = builder.create();
+        Gson gson = getGson();
         String json_tasks = gson.toJson(tasks);
         try{
             FileWriter writer = new FileWriter(FILE_PATH);
@@ -69,10 +65,7 @@ public class TaskManager {
         }
     }
     public void loadFromFile(){
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
-        Gson gson = builder.create();
-        String json_tasks = gson.toJson(tasks);
+        Gson gson = getGson();
         try{
             FileReader reader = new FileReader(FILE_PATH);
             tasks = gson.fromJson(reader, new TypeToken<ArrayList<Task>>(){}.getType());

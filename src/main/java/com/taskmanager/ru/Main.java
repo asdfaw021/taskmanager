@@ -8,11 +8,15 @@ public class Main{
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+    public static void enter(Scanner in){
+        System.out.println("Press enter to continue: ");
+        in.nextLine();
+    }
 
     public static void main(String[] args){
-        TaskManager taskManager = new TaskManager();
-        TaskCreator creator = new TaskCreator();
         Scanner in = new Scanner(System.in);
+        TaskManager taskManager = new TaskManager();
+        TaskCreator creator = new TaskCreator(in);
         boolean running = true;
         while(running){
             cleanConsole();
@@ -27,13 +31,13 @@ public class Main{
             System.out.println("4. Save tasks.");
             System.out.println("5. Load tasks.");
             System.out.println("0. Exit.");
-            System.out.println("Enter command (0-6): ");
+            System.out.println("Enter command (0-5): ");
             while(!CValid){
                 try {
                     choice = in.nextInt();
                     in.nextLine();
-                    if(choice < 0 || choice > 6){
-                        System.out.println("Wrong command, try again (0-6).");
+                    if(choice < 0 || choice > 5){
+                        System.out.println("Wrong command, try again (0-5).");
                     }else{
                         CValid = true;
                     }
@@ -47,8 +51,7 @@ public class Main{
                     cleanConsole();
                     taskManager.addTask(creator.createTask());
                     System.out.println("Task added successfully.");
-                    System.out.println("Press enter to continue: ");
-                    in.nextLine();
+                    enter(in);
                     break;
                 case 2:
                     cleanConsole();
@@ -57,32 +60,33 @@ public class Main{
                         try {
                             num = in.nextInt();
                             in.nextLine();
-                            taskManager.removeTask(num, in);
+                            taskManager.removeTask(num);
                             NValid = true;
                         } catch (Exception e) {
                             System.out.println("Please enter a number correctly:");
                             in.nextLine();
                         }
                     }
+                    enter(in);
                     break;
                 case 3:
                     cleanConsole();
                     taskManager.showTasks();
-                    System.out.println("Press enter to continue: ");
-                    in.nextLine();
+                    enter(in);
                     break;
                 case 4:
                     taskManager.saveToFile();
-                    in.nextLine();
+                    enter(in);
                     break;
                 case 5:
                     taskManager.loadFromFile();
-                    in.nextLine();
+                    enter(in);
                     break;
                 case 0:
                     running = false;
                     break;
             }
         }
+        in.close();
     }
 }
