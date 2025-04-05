@@ -89,7 +89,7 @@ public class TaskCreator {
 
         LocalDate cr = null;
         while(!Cvalid) {
-            System.out.print("\nEnter the date the task was created (YYYY-MM-DD) or leave blank for today.: ");
+            System.out.print("\nEnter the date the task was created (YYYY-MM-DD) or leave blank for today: ");
             cdate = in.nextLine();
             if(cdate.trim().isEmpty()) {
                 cr = LocalDate.now();

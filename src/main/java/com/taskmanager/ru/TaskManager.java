@@ -1,11 +1,20 @@
 package com.taskmanager.ru;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Scanner;
 
 public class TaskManager {
     private ArrayList<Task> tasks;
     private int nextId;
+    public static String FILE_PATH = "tasks.json";
     public TaskManager(){
         tasks = new ArrayList<>();
         nextId = 0;
@@ -43,6 +52,43 @@ public class TaskManager {
             String deadlineStr = task.getDeadline() != null ? task.getDeadline().toString() : "None";
             String createdStr = task.getCreated() != null ? task.getCreated().toString() : "None";
             System.out.printf("%2d | %-10s | %-15s | %-11s| %-10s | %-10s | %-10s |%n", task.getId(), task.getName(), task.getDescription(), task.getStatus(), task.getDifficulty(), deadlineStr, createdStr);
+        }
+    }
+    public void saveToFile() {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
+        Gson gson = builder.create();
+        String json_tasks = gson.toJson(tasks);
+        try{
+            FileWriter writer = new FileWriter(FILE_PATH);
+            writer.write(json_tasks);
+            writer.close();
+            System.out.println("Tasks have been successfully saved to "  + FILE_PATH);
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage() + " , please try again");
+        }
+    }
+    public void loadFromFile(){
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
+        Gson gson = builder.create();
+        String json_tasks = gson.toJson(tasks);
+        try{
+            FileReader reader = new FileReader(FILE_PATH);
+            tasks = gson.fromJson(reader, new TypeToken<ArrayList<Task>>(){}.getType());
+            reader.close();
+            if(tasks == null || tasks.isEmpty()){
+                nextId = 0;
+            }else{
+                for(Task task: tasks){
+                    if(task.getId() >= nextId){
+                        nextId = task.getId() + 1;
+                    }
+                }
+            }
+            System.out.println("Tasks have been successfully loaded from  "  + FILE_PATH);
+        }catch (IOException e){
+            System.out.println("Error: " + e.getMessage() + " , please try again");
         }
     }
 }

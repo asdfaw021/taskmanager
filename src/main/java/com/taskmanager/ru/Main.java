@@ -24,14 +24,16 @@ public class Main{
             System.out.println("1. Add a task.");
             System.out.println("2. Delete task.");
             System.out.println("3. Show tasks.");
-            System.out.println("4. Exit.");
-            System.out.println("Enter command (1-4): ");
+            System.out.println("4. Save tasks.");
+            System.out.println("5. Load tasks.");
+            System.out.println("0. Exit.");
+            System.out.println("Enter command (0-6): ");
             while(!CValid){
                 try {
                     choice = in.nextInt();
                     in.nextLine();
-                    if(choice < 1 || choice > 4){
-                        System.out.println("Wrong command, try again (1-4).");
+                    if(choice < 0 || choice > 6){
+                        System.out.println("Wrong command, try again (0-6).");
                     }else{
                         CValid = true;
                     }
@@ -70,6 +72,14 @@ public class Main{
                     in.nextLine();
                     break;
                 case 4:
+                    taskManager.saveToFile();
+                    in.nextLine();
+                    break;
+                case 5:
+                    taskManager.loadFromFile();
+                    in.nextLine();
+                    break;
+                case 0:
                     running = false;
                     break;
             }
